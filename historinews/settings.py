@@ -19,7 +19,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 try:
     import secret
 except ImportError as err:
-    err.extra_info = "secret.py was not created!"
+    err.extra_info = 'secret.py was not created!'
     raise 
 
 # Quick-start development settings - unsuitable for production
@@ -46,8 +46,8 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'rest_framework',
     'historinews.api',
+    'rest_framework',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -110,7 +110,7 @@ if DEBUG:
         'DEFAULT_PERMISSION_CLASSES': (
             'rest_framework.permissions.AllowAny',
         ),
-    'DEFAULT_PARSER_CLASSES': (
+        'DEFAULT_PARSER_CLASSES': (
             'rest_framework.parsers.JSONParser',
         ),
     }
