@@ -47,6 +47,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'historinews.api',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -65,7 +66,7 @@ ROOT_URLCONF = 'historinews.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [], #  TODO: [os.path.join(BASE_DIR, ***STATIC DIR PATH***)],
+        'DIRS': [], #  TODO: [os.path.join(BASE_DIR, 'historinews/static/ember/')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -102,6 +103,7 @@ USE_L10N = True
 USE_TZ = True
 
 STATIC_URL = '/static/'
+STATICFILES_DIRS = ('/opt/historinews-server/historinews/static/',)
 
 if DEBUG:
     REST_FRAMEWORK = {

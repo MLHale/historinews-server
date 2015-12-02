@@ -1,3 +1,3 @@
 #!/bin/sh
 
-/usr/sbin/apache2ctl restart && /usr/sbin/apachectl -k graceful
+sudo /usr/sbin/apache2ctl restart && sudo /usr/sbin/apachectl -k graceful
