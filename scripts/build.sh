@@ -10,6 +10,7 @@ sudo cp ${ROOT_DIR}/000-default.conf ${APACHE_CONFIG}
 
 cp -R ${DJANGO_STATIC_DIR}/admin ${STATIC_DIR}/admin
 cp -R ${REST_FRAMEWORK_CSS_DIR} ${STATIC_DIR}/rest_framework
+sudo chown ${USER}:www-data pdfs/
 
 cd ${ROOT_DIR} \
   && sudo python generate_secrets.py \

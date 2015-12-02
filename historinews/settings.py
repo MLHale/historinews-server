@@ -103,7 +103,10 @@ USE_L10N = True
 USE_TZ = True
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS = ('/opt/historinews-server/historinews/static/',)
+STATICFILES_DIRS = (os.path.join(BASE_DIR, 'historinews/static'),)
+
+MEDIA_URL = '/pdfs/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'historinews/pdfs')
 
 if DEBUG:
     REST_FRAMEWORK = {

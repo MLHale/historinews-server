@@ -10,8 +10,8 @@ class article(models.Model):
     articleTitle = models.CharField(max_length=1000, blank=False, unique=False)
     authorName = models.CharField(max_length=1000, blank=True, unique=False)
     articleCreationDate = models.DateField()
-    ocrText = models.TextField(blank=False, unique=True)
+    ocrText = models.TextField(blank=False, unique=False)
     pdfLocation = models.FileField()
 
     class Meta:
-        verbose_name_plural = "Articles"
+        verbose_name_plural = "articles"
