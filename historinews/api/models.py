@@ -11,7 +11,10 @@ class article(models.Model):
     authorName = models.CharField(max_length=1000, blank=True, unique=False)
     articleCreationDate = models.DateField()
     ocrText = models.TextField(blank=False, unique=False)
-    pdfLocation = models.FileField()
-
+    pdf = models.FileField()
+    
+    def pdfLocation(self):
+        return self.pdf.url
+    
     class Meta:
         verbose_name_plural = "articles"
