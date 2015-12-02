@@ -1,4 +1,9 @@
+from django.core.exceptions import ValidationError
 from django.db import models
+
+def validate_is_pdf(value):
+    if not value.name.endswith('.pdf'):
+        raise ValidationError(u'Is not a PDF!')
 
 class article(models.Model):
     """
@@ -11,7 +16,7 @@ class article(models.Model):
     authorName = models.CharField(max_length=1000, blank=True, unique=False)
     articleCreationDate = models.DateField()
     ocrText = models.TextField(blank=False, unique=False)
-    pdf = models.FileField()
+    pdf = models.FileField(validators=[validate_is_pdf])
     
     def pdfLocation(self):
         return self.pdf.url
