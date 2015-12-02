@@ -8,7 +8,7 @@ class admin_article_thumnail_widget(AdminFileWidget):
         output = []
     
         if value != None:
-            output.append(u'<img alt="%s" src="%s" />' % (value.url, value.url,))
+            output.append(u'<img alt="%s" src="%s" />' % (value.thumb, value.thumb,))
         else :
             output.append(_(u'Thumbnail will be automatically generated from uploaded document.'))
 

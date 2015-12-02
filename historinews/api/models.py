@@ -33,7 +33,7 @@ class article(models.Model):
 def pdf_post_save(sender, instance=False, **kwargs):
     """This post save function creates a thumbnail for the PDF"""
     pdf = article.objects.get(pk=instance.pk)
-    command = "convert -thumbnail 200 -extent 200x200 %s%s[0] %s%s.png" % (settings.MEDIA_ROOT, pdf.url, settings.MEDIA_ROOT, pdf.newspaperName+'_'+pdf.newspaperYear+'_'+pdf.articleTitle)
+    command = "convert -thumbnail 200 -extent 200x200 %s%s[0] %s%s.png" % (settings.MEDIA_ROOT, pdf.pdfLocation, settings.MEDIA_ROOT, pdf.newspaperName+'_'+str(pdf.newspaperYear)+'_'+pdf.articleTitle)
 
     proc = subprocess.Popen(command,
         shell=True,

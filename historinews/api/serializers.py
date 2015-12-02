@@ -7,4 +7,4 @@ from historinews.api.models import *
 class article_serializer(serializers.ModelSerializer):
     class Meta:
         model = article
-        fields = ('keywords', 'newspaperName', 'newspaperYear', 'articleTitle', 'authorName', 'articleCreationDate', 'ocrText', 'pdfLocation')
+        fields = ('keywords', 'newspaperName', 'newspaperYear', 'articleTitle', 'authorName', 'articleCreationDate', 'ocrText', 'pdfLocation', 'thumb')
