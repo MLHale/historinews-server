@@ -34,7 +34,6 @@ DEBUG = True
 if DEBUG:
     ALLOWED_HOSTS = []
 else:
-    # TODO: change this
     ALLOWED_HOSTS = ['*']
 
 
@@ -66,7 +65,7 @@ ROOT_URLCONF = 'historinews.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [], #  TODO: [os.path.join(BASE_DIR, 'historinews/static/ember/')],
+        'DIRS': [os.path.join(BASE_DIR, 'historinews/static/ember/')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
