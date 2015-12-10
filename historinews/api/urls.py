@@ -13,4 +13,6 @@ urlpatterns = [
     url(r'^', include(router.urls)),
     url(r'^articles/?', views.article_view.as_view()),
     url(r'^articles/(?P<id>\d+)/?', views.article_view.as_view()),
+    url(r'^newspapers/?', views.newspaper_view.as_view()),
+    url(r'^newspapers/(?P<id>\d+)/?', views.newspaper_view.as_view()),
 ]
