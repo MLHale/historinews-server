@@ -26,33 +26,16 @@ def crossdomain(request):
   """
   return render(request, 'crossdomain.xml', {},  content_type="application/xml")
 
-class article_view(APIView):
-    permission_classes = (AllowAny,)
-    serializer_class = article_serializer
-    
-    def get(self, request, id=None, format=None):
-        if id:
-            articles = article.objects.filter(id=id)
-        else:
-            articles = article.objects.all()
-        
-        # Serialize team object and return the serialized data.
-        articles_serializer = article_serializer(articles, many=True, context={'request': request})
-        return Response({
-          "articles": articles_serializer.data,
-        })
 class newspaper_view(APIView):
     permission_classes = (AllowAny,)
-    serializer_class = article_serializer
-    
+
     def get(self, request, id=None, format=None):
         if id:
-            articles = article.objects.filter(id=id)
+            newspapers = newspaper.objects.filter(id=id)
         else:
-            articles = article.objects.all()
-        
-        # Serialize team object and return the serialized data.
-        articles_serializer = article_serializer(articles, many=True, context={'request': request})
+            newspapers = newspaper.objects.all()
+
+        newspapers_serializer = newspaper_serializer(newspapers, many=True, context={'request': request})
         return Response({
-          "articles": articles_serializer.data,
+          "newspapers": newspapers_serializer.data,
         })
