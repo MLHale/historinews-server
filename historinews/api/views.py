@@ -5,6 +5,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
 from historinews.api.models import *
 from historinews.api.serializers import *
+import os
 
 def home(request):
   """
@@ -37,5 +38,5 @@ class newspaper_view(APIView):
 
         newspapers_serializer = newspaper_serializer(newspapers, many=True, context={'request': request})
         return Response({
-          "newspapers": newspapers_serializer.data,
+          'newspapers': newspapers_serializer.data,
         })

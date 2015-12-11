@@ -106,6 +106,8 @@ STATICFILES_DIRS = (os.path.join(BASE_DIR, 'historinews/static'),)
 
 MEDIA_URL = '/pdfs/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'historinews/pdfs')
+SUB_MEDIA_URL = '/pdfs/thumbs'
+SUB_MEDIA_ROOT = os.path.join(BASE_DIR, 'historinews/pdfs/thumbs')
 
 if DEBUG:
     REST_FRAMEWORK = {

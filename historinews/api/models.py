@@ -22,10 +22,14 @@ class newspaper(models.Model):
     newspaperCreationDate = models.DateField()
     ocrText = models.TextField(blank=False, unique=False)
     pdf = models.FileField(validators=[validate_is_pdf])
-    thumb = models.ImageField()
+    #thumb = models.ImageField()
+    thumb_name = models.CharField(max_length=200, blank=True, unique=False)
     
     def pdfLocation(self):
         return self.pdf.url
     
+    def thumb(self):
+        return '{dirpath}/{filename}'.format(dirpath=settings.SUB_MEDIA_URL, filename=self.thumb_name)
+    
     class Meta:
-        verbose_name_plural = "articles"
+        verbose_name_plural = 'newspapers'
