@@ -7,8 +7,24 @@ from wand.image import Image
 import os
 
 
+ADMIN_DESCRIPTION = """
+<div class="form-row">
+  <h1>Note:</h1>
+  <h3>
+    <b>Bold</b> fields are required
+  </h3>
+  <br/><br/><br/>
+</div>
+"""
+
 class newspaper_admin(admin.ModelAdmin):
     list_display = ('id', 'newspaperTitle', 'newspaperCreationDate')
+    fieldsets = (
+        (None, {
+            'fields': ('_keywords', 'newspaperName', 'newspaperTitle', 'authorName', 'newspaperCreationDate', 'ocrText', 'pdf'),
+            'description': ADMIN_DESCRIPTION,
+        }),
+    )
 
     def get_form(self, request, obj, **kwargs):
         self.exclude = ('thumb_name', 'newspaperYear')
