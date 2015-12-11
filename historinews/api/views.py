@@ -5,6 +5,9 @@ from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
 from historinews.api.models import *
 from historinews.api.serializers import *
+import calendar
+import datetime
+import re
 
 
 def home(request):
@@ -27,6 +30,7 @@ def crossdomain(request):
   """
   return render(request, 'crossdomain.xml', {},  content_type="application/xml")
 
+date_regex = re.compile(r'^(\d+)[\/-](\d+)$')
 class newspaper_view(APIView):
     permission_classes = (AllowAny,)
 
@@ -84,7 +88,44 @@ class newspaper_view(APIView):
                     if search_type in query_params and query_params[search_type] == 'true':
                         newspapers |= newspaper.objects.filter(ocrText__iregex=search_string)
 
+            # set startDate if exists
+            startDate = False
+            if 'startDate' in query_params:
+                result = date_regex.match(query_params['startDate'])
+                if result:
+                    result = result.groups()
+                    month, year = (int(i) for i in result)
+                    if month < 1:
+                        month = 1
+                    if month > 12:
+                        month = 12
+                    day = 1
+                    startDate = year, month, day
 
+            # set endDate if exists
+            endDate = False
+            if 'endDate' in query_params:
+                result = date_regex.match(query_params['endDate'])
+                if result:
+                    result = result.groups()
+                    month, year = (int(i) for i in result)
+                    if month < 1:
+                        month = 1
+                    if month > 12:
+                        month = 12
+                    day = calendar.monthrange(year, month)[1]
+                    endDate = year, month, day
+
+            # if both were given
+            if startDate and endDate:
+                newspapers = newspapers.filter(newspaperCreationDate__gt=datetime.date(*startDate), newspaperCreationDate__lt=datetime.date(*endDate))
+            # if start date was given but no end date
+            elif startDate and not endDate:
+                newspapers = newspapers.filter(newspaperCreationDate__gt=datetime.date(*startDate))
+            # if end date was given but no start date
+            elif endDate and not startDate:
+                newspapers = newspapers.filter(newspaperCreationDate__lt=datetime.date(*endDate))
+        
         newspapers_serializer = newspaper_serializer(newspapers, many=True, context={'request': request})
         return Response({
           'newspapers': newspapers_serializer.data,

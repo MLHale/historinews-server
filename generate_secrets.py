@@ -63,7 +63,7 @@ def main():
         f.write(generated_code)
 
     # modify access, since running as escalated user
-    os.system('chmod 755 ' + SECRET_FILE)
+    os.system('sudo chown $USER:www-data {secret_file} && sudo chmod 750 {secret_file}'.format(secret_file=SECRET_FILE))
 
 if __name__ == '__main__':
     main()
