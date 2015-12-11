@@ -5,6 +5,9 @@ from historinews.api.models import newspaper
 from historinews.widgets import admin_article_thumnail_widget
 from wand.image import Image
 import os
+from historinews.pdf import read_in
+from subprocess import Popen, PIPE
+from threading import Thread
 
 
 ADMIN_DESCRIPTION = """
@@ -17,11 +20,17 @@ ADMIN_DESCRIPTION = """
 </div>
 """
 
+def gen_ocr(obj):
+    proc = Popen(['pdf2txt.py', obj.pdf.path], stdout=PIPE)
+    out = proc.communicate()[0]
+    obj.ocrText = out
+    obj.save()
+
 class newspaper_admin(admin.ModelAdmin):
     list_display = ('id', 'newspaperTitle', 'newspaperCreationDate')
     fieldsets = (
         (None, {
-            'fields': ('_keywords', 'newspaperName', 'newspaperTitle', 'authorName', 'newspaperCreationDate', 'ocrText', 'pdf'),
+            'fields': ('_keywords', 'newspaperName', 'newspaperTitle', 'authorName', 'newspaperCreationDate', 'pdf', 'ocrText'),
             'description': ADMIN_DESCRIPTION,
         }),
     )
@@ -43,6 +52,12 @@ class newspaper_admin(admin.ModelAdmin):
           #img.resize(200, 150)
           img.save(filename=_thumbnail_path)
         obj.thumb_name = _thumbnail_name
+
+        # Grab OCRed text from PDF
+        if not obj.ocrText:
+            obj.ocrText = "Loading OCR text. Please wait..."
+            proc = Thread(target=gen_ocr, args=(obj,))
+            proc.start()
         
         # Save object again
         obj.save()

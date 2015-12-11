@@ -20,7 +20,7 @@ class newspaper(models.Model):
     newspaperTitle = models.CharField(max_length=1000, blank=False, unique=False)
     authorName = models.CharField(max_length=1000, blank=True, unique=False)
     newspaperCreationDate = models.DateField(help_text="Input as YYYY-MM-DD  <br/>&nbsp;&nbsp; Example) '1995-02-15'")
-    ocrText = models.TextField(blank=False, unique=False)
+    ocrText = models.TextField(default="", blank=True, unique=False, help_text="<b>Either enter the OCR text of the PDF yourself or let the uploader pull it out.<br/>NOTE: this will take a while, depending on the size of the PDF.<b>")
     pdf = models.FileField(validators=[validate_is_pdf])
     #thumb = models.ImageField()
     thumb_name = models.CharField(default='', max_length=200, blank=True, unique=False)
