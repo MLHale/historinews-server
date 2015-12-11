@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
 from historinews.api.models import *
 from historinews.api.serializers import *
-import os
+
 
 def home(request):
   """
@@ -34,7 +34,56 @@ class newspaper_view(APIView):
         if id:
             newspapers = newspaper.objects.filter(id=id)
         else:
-            newspapers = newspaper.objects.all()
+            query_params = request.query_params
+  
+            # check if search text was given
+            if 'searchText' not in query_params:
+                newspapers = newspaper.objects.all()
+            else:
+                # sanitize search string
+                search_string = query_params['searchText']
+                
+                newspapers = newspaper.objects.none()
+                
+                # check if searching all
+                search_type = 'all'
+                if search_type in query_params and query_params[search_type] == 'true':
+                    newspapers |= newspaper.objects.filter(authorName__iregex=search_string)
+                    newspapers |= newspaper.objects.filter(keywords__iregex=search_string)
+                    newspapers |= newspaper.objects.filter(newspaperCreationDate__iregex=search_string)
+                    newspapers |= newspaper.objects.filter(newspaperName__iregex=search_string)
+                    newspapers |= newspaper.objects.filter(newspaperTitle__iregex=search_string)
+                    newspapers |= newspaper.objects.filter(newspaperYear__iregex=search_string)
+                    newspapers |= newspaper.objects.filter(ocrText__iregex=search_string)
+                else:
+                    search_type = 'authorName'
+                    if search_type in query_params and query_params[search_type] == 'true':
+                        newspapers |= newspaper.objects.filter(authorName__iregex=search_string)
+                    
+                    search_type = 'keywords'
+                    if search_type in query_params and query_params[search_type] == 'true':
+                        newspapers |= newspaper.objects.filter(keywords__iregex=search_string)
+                    
+                    search_type = 'newspaperCreationDate'
+                    if search_type in query_params and query_params[search_type] == 'true':
+                        newspapers |= newspaper.objects.filter(newspaperCreationDate__iregex=search_string)
+                    
+                    search_type = 'newspaperName'
+                    if search_type in query_params and query_params[search_type] == 'true':
+                        newspapers |= newspaper.objects.filter(newspaperName__iregex=search_string)
+                    
+                    search_type = 'newspaperTitle'
+                    if search_type in query_params and query_params[search_type] == 'true':
+                        newspapers |= newspaper.objects.filter(newspaperTitle__iregex=search_string)
+                    
+                    search_type = 'newspaperYear'
+                    if search_type in query_params and query_params[search_type] == 'true':
+                        newspapers |= newspaper.objects.filter(newspaperYear__iregex=search_string)
+                    
+                    search_type = 'ocrText'
+                    if search_type in query_params and query_params[search_type] == 'true':
+                        newspapers |= newspaper.objects.filter(ocrText__iregex=search_string)
+
 
         newspapers_serializer = newspaper_serializer(newspapers, many=True, context={'request': request})
         return Response({
