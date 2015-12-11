@@ -12,7 +12,7 @@ cp -R ${REST_FRAMEWORK_CSS_DIR} ${STATIC_DIR}/rest_framework
 sudo chown -R ${USER}:www-data ${ROOT_DIR}/historinews/pdfs/
 
 cd ${ROOT_DIR} \
-  && sudo python generate_secrets.py \
+  && python generate_secrets.py /opt/historinews-server/historinews/secret.py \
   && python manage.py makemigrations \
   && python manage.py migrate \
   && python manage.py createsuperuser

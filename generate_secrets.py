@@ -7,7 +7,7 @@ import os,sys,string
 if len(sys.argv) > 1:
     SECRET_FILE = sys.argv[1]
 else:
-    SECRET_FILE = 'historinews/secret.py'
+    SECRET_FILE = '/opt/historinews-server/historinews/secret.py'
 
 _generated_code_template = '''
 # Django secret key

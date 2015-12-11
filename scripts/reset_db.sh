@@ -7,7 +7,7 @@ rm ${ROOT_DIR}/historinews/api/migrations/0*
 sudo rm ${ROOT_DIR}/historinews/pdfs/*.pdf
 sudo rm ${ROOT_DIR}/historinews/pdfs/thumbs/*.jpg
 cd ${ROOT_DIR} \
-  && python generate_secrets.py \
+  && python generate_secrets.py /opt/historinews-server/historinews/secret.py \
   && python manage.py makemigrations \
   && python manage.py migrate \
   && python manage.py createsuperuser
