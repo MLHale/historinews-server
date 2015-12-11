@@ -19,7 +19,7 @@ class newspaper(models.Model):
     newspaperYear = models.IntegerField(blank=True, unique=False)
     newspaperTitle = models.CharField(max_length=1000, blank=False, unique=False)
     authorName = models.CharField(max_length=1000, blank=True, unique=False)
-    newspaperCreationDate = models.DateField()
+    newspaperCreationDate = models.DateField(help_text="Input as YYYY-MM-DD  <br/>&nbsp;&nbsp; Example) '1995-02-15'")
     ocrText = models.TextField(blank=False, unique=False)
     pdf = models.FileField(validators=[validate_is_pdf])
     #thumb = models.ImageField()
