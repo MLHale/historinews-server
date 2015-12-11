@@ -53,7 +53,7 @@ class newspaper_view(APIView):
                 search_type = 'all'
                 if search_type in query_params and query_params[search_type] == 'true':
                     newspapers |= newspaper.objects.filter(authorName__iregex=search_string)
-                    newspapers |= newspaper.objects.filter(keywords__iregex=search_string)
+                    newspapers |= newspaper.objects.filter(_keywords__iregex=search_string)
                     newspapers |= newspaper.objects.filter(newspaperCreationDate__iregex=search_string)
                     newspapers |= newspaper.objects.filter(newspaperName__iregex=search_string)
                     newspapers |= newspaper.objects.filter(newspaperTitle__iregex=search_string)
@@ -66,7 +66,7 @@ class newspaper_view(APIView):
                     
                     search_type = 'keywords'
                     if search_type in query_params and query_params[search_type] == 'true':
-                        newspapers |= newspaper.objects.filter(keywords__iregex=search_string)
+                        newspapers |= newspaper.objects.filter(_keywords__iregex=search_string)
                     
                     search_type = 'newspaperCreationDate'
                     if search_type in query_params and query_params[search_type] == 'true':
