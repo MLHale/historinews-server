@@ -16,7 +16,7 @@ class newspaper(models.Model):
     keywords = models.CharField(max_length=1000, blank=True, unique=False)
     
     newspaperName = models.CharField(max_length=1000, blank=True, unique=False)
-    newspaperYear = models.IntegerField(blank=False, unique=False)
+    newspaperYear = models.IntegerField(blank=True, unique=False)
     newspaperTitle = models.CharField(max_length=1000, blank=False, unique=False)
     authorName = models.CharField(max_length=1000, blank=True, unique=False)
     newspaperCreationDate = models.DateField()

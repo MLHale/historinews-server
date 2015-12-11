@@ -8,20 +8,27 @@ import os
 
 
 class newspaper_admin(admin.ModelAdmin):
-    list_display = ('newspaperName', 'newspaperYear', 'newspaperTitle')
+    list_display = ('id', 'newspaperTitle', 'newspaperCreationDate')
 
     def get_form(self, request, obj, **kwargs):
-        self.exclude = ('thumb_name', )
+        self.exclude = ('thumb_name', 'newspaperYear')
         return super(newspaper_admin, self).get_form(request, obj, **kwargs)
 
     def save_model(self, request, obj, form, change):
         resp = super(newspaper_admin, self).save_model(request, obj, form, change)
+        
+        # Create year field
+        obj.newspaperYear = obj.newspaperCreationDate.year
+        
+        # Create thumbnail
         _thumbnail_name = '{name}.{ext}'.format(name=obj.id, ext='jpg')
         _thumbnail_path = os.path.join(settings.SUB_MEDIA_ROOT, _thumbnail_name)
         with Image(filename='{path}[{page}]'.format(path=obj.pdf.path, page=0)) as img:
           #img.resize(200, 150)
           img.save(filename=_thumbnail_path)
         obj.thumb_name = _thumbnail_name
+        
+        # Save object again
         obj.save()
         return resp
 
