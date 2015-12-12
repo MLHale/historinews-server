@@ -30,7 +30,8 @@ def crossdomain(request):
   """
   return render(request, 'crossdomain.xml', {},  content_type="application/xml")
 
-date_regex = re.compile(r'^(\d+)[\/-](\d+)$')
+#date_regex = re.compile(r'^(\d+)[\/-](\d+)$')
+date_regex = re.compile(r'^(\d+)[\/-](\d+)[\/-](\d+)$') # MM-DD-YYYY
 class newspaper_view(APIView):
     permission_classes = (AllowAny,)
 
@@ -91,10 +92,12 @@ class newspaper_view(APIView):
             # set startDate if exists
             startDate = False
             if 'startDate' in query_params:
+                # MM-DD-YYYY
                 result = date_regex.match(query_params['startDate'])
                 if result:
                     result = result.groups()
-                    month, year = (int(i) for i in result)
+                    #month, year = (int(i) for i in result)
+                    month, day, year = (int(i) for i in result)
                     if month < 1:
                         month = 1
                     if month > 12:
@@ -105,10 +108,12 @@ class newspaper_view(APIView):
             # set endDate if exists
             endDate = False
             if 'endDate' in query_params:
+                # MM-DD-YYYY
                 result = date_regex.match(query_params['endDate'])
                 if result:
                     result = result.groups()
-                    month, year = (int(i) for i in result)
+                    #month, year = (int(i) for i in result)
+                    month, day, year = (int(i) for i in result)
                     if month < 1:
                         month = 1
                     if month > 12:
@@ -116,16 +121,45 @@ class newspaper_view(APIView):
                     day = calendar.monthrange(year, month)[1]
                     endDate = year, month, day
 
-            # if both were given
-            if startDate and endDate:
-                newspapers = newspapers.filter(newspaperCreationDate__gt=datetime.date(*startDate), newspaperCreationDate__lt=datetime.date(*endDate))
-            # if start date was given but no end date
-            elif startDate and not endDate:
-                newspapers = newspapers.filter(newspaperCreationDate__gt=datetime.date(*startDate))
-            # if end date was given but no start date
-            elif endDate and not startDate:
-                newspapers = newspapers.filter(newspaperCreationDate__lt=datetime.date(*endDate))
-        
+            # check for period
+            if 'period' in query_params and query_params['period']:
+                era_newspapers = newspaper.objects.none()
+                periods = query_params['period'].split('|')
+                for period in periods:
+                    if period.lower() == 'gilded age':
+                        era_newspapers |= newspapers.filter(newspaperCreationDate__gt=datetime.date(1870, 1, 1), newspaperCreationDate__lt=datetime.date(1900, 12, 31))
+                    elif period.lower() == 'progressive era':
+                        era_newspapers |= newspapers.filter(newspaperCreationDate__gt=datetime.date(1890, 1, 1), newspaperCreationDate__lt=datetime.date(1920, 12, 31))
+                    elif period.lower() == 'korean war':
+                        era_newspapers |= newspapers.filter(newspaperCreationDate__gt=datetime.date(1939, 1, 1), newspaperCreationDate__lt=datetime.date(1939, 12, 31))
+                    elif period.lower() == 'world war ii':
+                        era_newspapers |= newspapers.filter(newspaperCreationDate__gt=datetime.date(1950, 1, 1), newspaperCreationDate__lt=datetime.date(1950, 12, 31))
+
+                # check for start and end dates after era taken into account
+                if startDate and endDate:
+                    era_newspapers |= newspapers.filter(newspaperCreationDate__gt=datetime.date(*startDate), newspaperCreationDate__lt=datetime.date(*endDate))
+                elif startDate and not endDate:
+                    era_newspapers |= newspapers.filter(newspaperCreationDate__gt=datetime.date(*startDate))
+                elif endDate and not startDate:
+                    era_newspapers |= newspapers.filter(newspaperCreationDate__lt=datetime.date(*endDate))
+                newspapers = era_newspapers
+            else:
+                # otherwise just check start and end date
+                if startDate and endDate:
+                    newspapers = newspapers.filter(newspaperCreationDate__gt=datetime.date(*startDate), newspaperCreationDate__lt=datetime.date(*endDate))
+                elif startDate and not endDate:
+                    newspapers = newspapers.filter(newspaperCreationDate__gt=datetime.date(*startDate))
+                elif endDate and not startDate:
+                    newspapers = newspapers.filter(newspaperCreationDate__lt=datetime.date(*endDate))
+
+            # check for newspaper name
+            if 'name' in query_params and query_params['name']:
+                named_newspapers = newspaper.objects.none()
+                names = query_params['name'].split('|')
+                for name in names:
+                    named_newspapers |= newspapers.filter(newspaperName__iexact=name)
+                newspapers = named_newspapers
+
         newspapers_serializer = newspaper_serializer(newspapers, many=True, context={'request': request})
         return Response({
           'newspapers': newspapers_serializer.data,

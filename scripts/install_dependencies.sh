@@ -2,7 +2,8 @@
 
 export SCRIPTS_DIR=/opt/historinews-server/scripts
 
-sudo apt-get -y install \
+sudo apt-get update \
+  && sudo apt-get -y install \
     apache2 \
     libapache2-mod-wsgi \
     libmagickwand-dev \
