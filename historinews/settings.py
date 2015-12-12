@@ -29,7 +29,7 @@ except ImportError as err:
 SECRET_KEY = secret.SECRET_KEY.decode('base64')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 if DEBUG:
     ALLOWED_HOSTS = []
@@ -132,4 +132,3 @@ else:
             'rest_framework.parsers.JSONParser',
         ),
     }
-
