@@ -50,6 +50,7 @@ class newspaper_admin(admin.ModelAdmin):
         _thumbnail_path = os.path.join(settings.SUB_MEDIA_ROOT, _thumbnail_name)
         with Image(filename='{path}[{page}]'.format(path=obj.pdf.path, page=0)) as img:
           #img.resize(200, 150)
+          img.resize(143, 187)
           img.save(filename=_thumbnail_path)
         obj.thumb_name = _thumbnail_name
 
