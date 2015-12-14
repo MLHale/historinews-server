@@ -131,9 +131,9 @@ class newspaper_view(APIView):
                     elif period.lower() == 'progressive era':
                         era_newspapers |= newspapers.filter(newspaperCreationDate__gt=datetime.date(1890, 1, 1), newspaperCreationDate__lt=datetime.date(1920, 12, 31))
                     elif period.lower() == 'korean war':
-                        era_newspapers |= newspapers.filter(newspaperCreationDate__gt=datetime.date(1939, 1, 1), newspaperCreationDate__lt=datetime.date(1939, 12, 31))
+                        era_newspapers |= newspapers.filter(newspaperCreationDate__gt=datetime.date(1939, 1, 1), newspaperCreationDate__lt=datetime.date(1945, 12, 31))
                     elif period.lower() == 'world war ii':
-                        era_newspapers |= newspapers.filter(newspaperCreationDate__gt=datetime.date(1950, 1, 1), newspaperCreationDate__lt=datetime.date(1950, 12, 31))
+                        era_newspapers |= newspapers.filter(newspaperCreationDate__gt=datetime.date(1950, 1, 1), newspaperCreationDate__lt=datetime.date(1953, 12, 31))
 
                 # check for start and end dates after era taken into account
                 if startDate and endDate:
